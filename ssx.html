@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <select id="selectedProvice" onchange="refreshCity()"></select>
+    <select id="selectedCity" onchange="refreshCounty()"></select>
+    <select id="selectedCountry"></select>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        // 模拟假数据
+        var area = "[{id:101,name:'北京',pid:0},{id:102,name:'山东',pid:0},{id:103,name:'河北',pid:0},{id:201,name:'海淀区',pid:101},{id:202,name:'丰台区',pid:101},{id:203,name:'朝阳区',pid:101},{id:210,name:'济南',pid:102},{id:211,name:'青岛',pid:102},{id:212,name:'烟台',pid:102},{id:220,name:'石家庄',pid:103},{id:320,name:'石家庄的县',pid:220},{id:221,name:'邯郸',pid:103},{id:222,name:'邢台',pid:103},{id:301,name:'长清',pid:210},{id:302,name:'市中区',pid:210},{id:303,name:'章丘',pid:210},{id:304,name:'市南区',pid:211},{id:305,name:'黄岛',pid:211},{id:306,name:'平度',pid:211}]";
+        // 将字符串数据转为可执行的js代码
+        var areaJson = eval("(" + area + ")");
+        // 渲染省份
+        renderProvice(selectedProviceId);
+        var selectedProviceId = $("#selectedProvice").val();
+        // console.log(selectedProviceId);
+        // 渲染市
+        renderCity(selectedProviceId);
+        var selectedCityId = $("#selectedCity").val();
+        console.log(selectedCityId);
+        // 渲染县
+        renderCountry(selectedCityId);
+        // 省
+        function renderProvice() {
+            areaJson.forEach(function (value) {
+                if (value.pid == 0) {
+                    var proviceOption = '<option value="' + value.id + '">' + value.name + '</option>';
+                    $("#selectedProvice").append(proviceOption);
+                }
+            })
+        }
+        // 市
+        function renderCity(proviceId) {
+            $("#selectedCity").empty();
+            areaJson.forEach(function (value) {
+                if (value.pid == proviceId) {
+                    var countryOption = '<option value="' + value.id + '">' + value.name + '</option>';
+                    $("#selectedCity").append(countryOption);
+                }
+            })
+        }
+        // 县
+        function renderCountry(cityId) {
+            $("#selectedCountry").empty();
+            areaJson.forEach(function (value) {
+                if (value.pid == cityId) {
+                    var cityOption = '<option value="' + value.id + '">' + value.name + '</option>';
+                    $("#selectedCountry").append(cityOption);
+                }
+            })
+        }
+        // 省值改变，刷新市和县
+        function refreshCity() {
+            var selectedProviceId = $("#selectedProvice").val();
+            renderCity(selectedProviceId);
+            var selectedCityId = $("#selectedCity").val();
+            console.log(selectedCityId);
+            renderCountry(selectedCityId);
+        }
+        // 市值改变，刷新县
+        function refreshCounty() {
+            var selectedCityId = $("#selectedCity").val();
+            console.log(selectedCityId);
+            renderCountry(selectedCityId);
+        }
+    </script>
+
+</body>
+
+</html>
